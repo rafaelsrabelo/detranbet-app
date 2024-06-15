@@ -1,6 +1,5 @@
 import 'package:detranbet/components/button.dart';
 import 'package:detranbet/utils/config.dart';
-import 'package:detranbet/utils/text.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
