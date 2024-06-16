@@ -29,7 +29,7 @@ class _AuthPageState extends State<AuthPage> {
               Text(
                 AppText.ptBrText['welcome_text']!,
                 style: GoogleFonts.inter(
-                    fontSize: 36,
+                    fontSize: 30,
                     fontWeight: FontWeight.w700,
                     color: Colors.white),
               ),
@@ -43,13 +43,11 @@ class _AuthPageState extends State<AuthPage> {
               Config.spaceSmall,
               const LoginForm(),
               Config.spaceMedium,
-              Center(
-                child: Text(AppText.ptBrText['registered_text']!,
-                    style: GoogleFonts.inter(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w400,
-                        color: Colors.white)),
-              )
+              Text(AppText.ptBrText['registered_text']!,
+                  style: GoogleFonts.inter(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w400,
+                      color: Colors.white))
             ])),
       ),
     );

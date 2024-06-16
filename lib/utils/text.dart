@@ -2,7 +2,7 @@
 
 class AppText {
   static final ptBrText = {
-    'welcome_text': 'Bem-vindo',
+    'welcome_text': 'Bem-vindo ao Detranbet',
     'signIn_text': 'Faça login na sua conta',
     'registered_text': 'Já tem uma conta? Cadastre agora',
     'register_text': 'Você pode se cadastrar facilmente e começar apostar',

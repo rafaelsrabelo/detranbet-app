@@ -1,4 +1,5 @@
 import 'package:detranbet/components/button.dart';
+import 'package:detranbet/providers/dio_provider.dart';
 import 'package:detranbet/utils/config.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -72,9 +73,11 @@ class _LoginFormState extends State<LoginForm> {
             Button(
                 width: double.infinity,
                 title: 'Entrar',
-                onPressed: () {},
+                onPressed: () async {
+                  final token = await DioProvider()
+                      .getToken(_emailController.text, _passController.text);
+                },
                 disable: false),
-            // Config.spaceSmall,
           ],
         ));
   }
