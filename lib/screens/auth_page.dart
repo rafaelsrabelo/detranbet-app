@@ -1,4 +1,5 @@
 import 'package:detranbet/components/login_form.dart';
+import 'package:detranbet/components/sign_up_form.dart';
 import 'package:detranbet/utils/config.dart';
 import 'package:detranbet/utils/text.dart';
 import 'package:flutter/material.dart';
@@ -12,10 +13,13 @@ class AuthPage extends StatefulWidget {
 }
 
 class _AuthPageState extends State<AuthPage> {
+  bool isSignIn = true;
+
   @override
   Widget build(BuildContext context) {
     Config().init(context);
     return Scaffold(
+      backgroundColor: Config.backgroundColor,
       body: Padding(
         padding: const EdgeInsets.symmetric(
           horizontal: 20,
@@ -34,20 +38,29 @@ class _AuthPageState extends State<AuthPage> {
                     color: Colors.white),
               ),
               Text(
-                AppText.ptBrText['signIn_text']!,
+                isSignIn
+                    ? AppText.ptBrText['signIn_text']!
+                    : AppText.ptBrText['registered_text']!,
                 style: GoogleFonts.inter(
                     fontSize: 20,
                     fontWeight: FontWeight.w300,
                     color: Colors.white),
               ),
               Config.spaceSmall,
-              const LoginForm(),
+              isSignIn ? const LoginForm() : const SignUpForm(),
               Config.spaceMedium,
-              Text(AppText.ptBrText['registered_text']!,
-                  style: GoogleFonts.inter(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w400,
-                      color: Colors.white))
+              InkWell(
+                onTap: () {
+                  setState(() {
+                    isSignIn = !isSignIn;
+                  });
+                },
+                child: Text(isSignIn ? 'Crie sua conta' : 'Entre na sua conta',
+                    style: GoogleFonts.inter(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w400,
+                        color: Colors.white)),
+              )
             ])),
       ),
     );

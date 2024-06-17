@@ -1,22 +1,19 @@
 import 'package:detranbet/components/button.dart';
-import 'package:detranbet/components/loader.dart';
-import 'package:detranbet/main.dart';
-import 'package:detranbet/models/auth_model.dart';
 import 'package:detranbet/providers/dio_provider.dart';
 import 'package:detranbet/utils/config.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:provider/provider.dart';
 
-class LoginForm extends StatefulWidget {
-  const LoginForm({super.key});
+class SignUpForm extends StatefulWidget {
+  const SignUpForm({super.key});
 
   @override
-  State<LoginForm> createState() => _LoginFormState();
+  State<SignUpForm> createState() => _SignUpFormState();
 }
 
-class _LoginFormState extends State<LoginForm> {
+class _SignUpFormState extends State<SignUpForm> {
   final _formKey = GlobalKey<FormState>();
+  final _nameController = TextEditingController();
   final _emailController = TextEditingController();
   final _passController = TextEditingController();
   bool obscurePass = true;
@@ -27,6 +24,22 @@ class _LoginFormState extends State<LoginForm> {
       key: _formKey,
       child: Column(
         children: [
+          TextFormField(
+            controller: _nameController,
+            keyboardType: TextInputType.name,
+            cursorColor: Config.primaryColor,
+            style: GoogleFonts.inter(
+              color: Config.primaryColor,
+            ),
+            decoration: const InputDecoration(
+              hintText: 'Name',
+              labelText: 'Nome',
+              alignLabelWithHint: true,
+              prefixIcon: Icon(Icons.person_outline),
+              prefixIconColor: Config.primaryColor,
+            ),
+          ),
+          Config.spaceSmall,
           TextFormField(
             controller: _emailController,
             keyboardType: TextInputType.emailAddress,
@@ -76,29 +89,28 @@ class _LoginFormState extends State<LoginForm> {
             ),
           ),
           Config.spaceSmall,
-          Consumer<AuthModel>(builder: (context, auth, child) {
-            return Button(
-              width: double.infinity,
-              title: 'Entrar',
-              onPressed: () async {
-                Loader.show(); // Mostra o indicador de carregamento
+          Button(
+            width: double.infinity,
+            title: 'Registrar',
+            onPressed: () async {
+              bool success = await DioProvider().createUser(
+                _emailController.text,
+                _nameController.text,
+                _passController.text,
+              );
 
-                final token = await DioProvider().getToken(
-                  _emailController.text,
-                  _passController.text,
+              if (success) {
+                // Redirecionar para a página de login ou mostrar uma mensagem de sucesso
+                print('Conta criada com sucesso');
+              } else {
+                // Mostrar mensagem de erro
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Erro ao criar conta')),
                 );
-
-                Loader
-                    .hide(); // Esconde o indicador de carregamento após a requisição
-
-                if (token != null) {
-                  auth.loginSuccess();
-                  MyApp.navigatorKey.currentState!.pushNamed('main');
-                }
-              },
-              disable: false,
-            );
-          }),
+              }
+            },
+            disable: false,
+          ),
         ],
       ),
     );

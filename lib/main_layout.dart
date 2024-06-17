@@ -18,14 +18,25 @@ class _MainLayoutState extends State<MainLayout> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: PageView(
-        controller: _page,
-        onPageChanged: ((value) {
-          setState(() {
-            currentPage = value;
-          });
-        }),
-        children: const <Widget>[HomePage(), HistoricPage()],
+      body: NotificationListener<ScrollNotification>(
+        onNotification: (scrollNotification) {
+          if (scrollNotification is ScrollStartNotification ||
+              scrollNotification is ScrollUpdateNotification ||
+              scrollNotification is ScrollEndNotification) {
+            return true;
+          }
+          return false;
+        },
+        child: PageView(
+          controller: _page,
+          onPageChanged: ((value) {
+            setState(() {
+              currentPage = value;
+            });
+          }),
+          physics: const NeverScrollableScrollPhysics(),
+          children: const <Widget>[HomePage(), HistoricPage()],
+        ),
       ),
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: Config.backgroundColor,
@@ -42,7 +53,7 @@ class _MainLayoutState extends State<MainLayout> {
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.history),
-            label: 'Apostas Realizadas',
+            label: 'Apostas',
           ),
         ],
       ),

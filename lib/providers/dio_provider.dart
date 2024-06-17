@@ -1,10 +1,33 @@
+import 'package:detranbet/components/loader.dart';
 import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class DioProvider {
+  Future<bool> createUser(String email, String name, String password) async {
+    try {
+      Loader.show();
+      var response = await Dio().post(
+        'https://my-bet-api.fly.dev/signup',
+        data: {
+          "player": {"email": email, "name": name, "password": password}
+        },
+      );
+
+      if (response.statusCode == 200 && response.data != null) {
+        return true; // Signup successful
+      }
+    } catch (e) {
+      print('Error during signup: $e');
+    } finally {
+      Loader.hide();
+    }
+    return false; // Signup failed
+  }
+
   // get token
   Future<String?> getToken(String email, String password) async {
     try {
+      Loader.show();
       var response = await Dio().post(
         'https://my-bet-api.fly.dev/login',
         data: {
@@ -25,8 +48,11 @@ class DioProvider {
 
           // Save email and name to SharedPreferences
           SharedPreferences prefs = await SharedPreferences.getInstance();
+          String tokenAccess = token;
           String email = response.data['status']['data']['user']['email'];
           String name = response.data['status']['data']['user']['name'];
+
+          await prefs.setString('token', tokenAccess);
           await prefs.setString('email', email);
           await prefs.setString('name', name);
 
@@ -35,6 +61,8 @@ class DioProvider {
       }
     } catch (e) {
       print('Error during login: $e');
+    } finally {
+      Loader.hide();
     }
     return null;
   }
