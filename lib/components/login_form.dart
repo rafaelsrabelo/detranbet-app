@@ -76,6 +76,11 @@ class _LoginFormState extends State<LoginForm> {
                 onPressed: () async {
                   final token = await DioProvider()
                       .getToken(_emailController.text, _passController.text);
+
+                  if (token != null) {
+                    // ignore: use_build_context_synchronously
+                    Navigator.of(context).pushNamed('main');
+                  }
                 },
                 disable: false),
           ],
