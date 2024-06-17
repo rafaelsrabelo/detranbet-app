@@ -6,6 +6,7 @@ import 'package:detranbet/providers/dio_provider.dart';
 import 'package:detranbet/utils/config.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:motion_toast/motion_toast.dart';
 import 'package:provider/provider.dart';
 
 class LoginForm extends StatefulWidget {
@@ -95,6 +96,11 @@ class _LoginFormState extends State<LoginForm> {
                   auth.loginSuccess();
                   MyApp.navigatorKey.currentState!.pushNamed('main');
                 }
+
+                MotionToast.success(
+                  title: const Text("Login realizado com sucesso!"),
+                  description: const Text("Aproveite a sua conta!"),
+                ).show(context);
               },
               disable: false,
             );

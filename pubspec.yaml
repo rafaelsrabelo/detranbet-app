@@ -16,6 +16,7 @@ dependencies:
   shared_preferences: ^2.2.3
   provider: ^6.1.2
   asuka: ^2.2.1
+  motion_toast: ^2.10.0
 
   cupertino_icons: ^1.0.6
 

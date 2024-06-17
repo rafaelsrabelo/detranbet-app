@@ -3,6 +3,7 @@ import 'package:detranbet/providers/dio_provider.dart';
 import 'package:detranbet/utils/config.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:motion_toast/motion_toast.dart';
 
 class SignUpForm extends StatefulWidget {
   const SignUpForm({super.key});
@@ -100,13 +101,15 @@ class _SignUpFormState extends State<SignUpForm> {
               );
 
               if (success) {
-                // Redirecionar para a página de login ou mostrar uma mensagem de sucesso
-                print('Conta criada com sucesso');
+                MotionToast.success(
+                  title: const Text("Conta criada com sucesso"),
+                  description: const Text("Example of success motion toast"),
+                ).show(context);
               } else {
-                // Mostrar mensagem de erro
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Erro ao criar conta')),
-                );
+                MotionToast.error(
+                        title: const Text("Error"),
+                        description: const Text("Please enter your name"))
+                    .show(context);
               }
             },
             disable: false,
