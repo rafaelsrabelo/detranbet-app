@@ -38,25 +38,25 @@ class _MainLayoutState extends State<MainLayout> {
           children: const <Widget>[HomePage(), HistoricPage()],
         ),
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: Config.backgroundColor,
-        currentIndex: currentPage,
-        onTap: (page) {
-          _page.animateToPage(page,
-              duration: const Duration(milliseconds: 500),
-              curve: Curves.easeInOut);
-        },
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Início',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.history),
-            label: 'Apostas',
-          ),
-        ],
-      ),
+      // bottomNavigationBar: BottomNavigationBar(
+      //   backgroundColor: Config.backgroundColor,
+      //   currentIndex: currentPage,
+      //   onTap: (page) {
+      //     _page.animateToPage(page,
+      //         duration: const Duration(milliseconds: 500),
+      //         curve: Curves.easeInOut);
+      //   },
+      //   items: const <BottomNavigationBarItem>[
+      //     BottomNavigationBarItem(
+      //       icon: Icon(Icons.home),
+      //       label: 'Início',
+      //     ),
+      //     BottomNavigationBarItem(
+      //       icon: Icon(Icons.history),
+      //       label: 'Apostas',
+      //     ),
+      //   ],
+      // ),
     );
   }
 }

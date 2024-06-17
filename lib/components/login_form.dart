@@ -95,12 +95,16 @@ class _LoginFormState extends State<LoginForm> {
                 if (token != null) {
                   auth.loginSuccess();
                   MyApp.navigatorKey.currentState!.pushNamed('main');
+                  MotionToast.success(
+                    title: const Text("Login realizado com sucesso!"),
+                    description: const Text("Aproveite a sua conta!"),
+                  ).show(context);
+                } else {
+                  MotionToast.error(
+                    title: const Text("Login inválido!"),
+                    description: const Text("Email ou senha inválido!"),
+                  ).show(context);
                 }
-
-                MotionToast.success(
-                  title: const Text("Login realizado com sucesso!"),
-                  description: const Text("Aproveite a sua conta!"),
-                ).show(context);
               },
               disable: false,
             );

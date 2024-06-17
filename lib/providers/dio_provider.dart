@@ -1,4 +1,5 @@
 import 'package:detranbet/components/loader.dart';
+import 'package:detranbet/models/league.dart';
 import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -80,19 +81,39 @@ class DioProvider {
     }
   }
 
-  Future<dynamic> getLeagues(String token) async {
+  Future<List<League>> getLeagues(String token) async {
     try {
       var response = await Dio().get(
         'https://my-bet-api.fly.dev/v2/leagues/',
         options: Options(headers: {"Authorization": "Bearer $token"}),
       );
 
-      print(response);
-
-      return response;
+      if (response.statusCode == 200 && response.data != null) {
+        List<dynamic> leaguesJson = response.data;
+        return leaguesJson.map((json) => League.fromJson(json)).toList();
+      }
     } catch (e) {
       print('Error getting leagues: $e');
-      return null;
+    }
+    return [];
+  }
+
+  Future<void> logout(String token) async {
+    try {
+      Loader.show();
+      var response = await Dio().delete(
+        'https://my-bet-api.fly.dev/logout',
+        options: Options(headers: {"Authorization": "Bearer $token"}),
+      );
+
+      if (response.statusCode == 200) {
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        await prefs.clear(); // Clear all stored data
+      }
+    } catch (e) {
+      print('Error during logout: $e');
+    } finally {
+      Loader.hide();
     }
   }
 }
