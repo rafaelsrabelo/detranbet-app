@@ -1,4 +1,5 @@
 import 'package:detranbet/components/loader.dart';
+import 'package:detranbet/models/game_model.dart';
 import 'package:detranbet/models/league.dart';
 import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -83,6 +84,7 @@ class DioProvider {
 
   Future<List<League>> getLeagues(String token) async {
     try {
+      // Loader.show();
       var response = await Dio().get(
         'https://my-bet-api.fly.dev/v2/leagues/',
         options: Options(headers: {"Authorization": "Bearer $token"}),
@@ -93,7 +95,39 @@ class DioProvider {
         return leaguesJson.map((json) => League.fromJson(json)).toList();
       }
     } catch (e) {
-      print('Error getting leagues: $e');
+      if (e is DioError &&
+          e.response != null &&
+          e.response!.statusCode == 401) {
+        // Unauthorized: logout and redirect to '/'
+        await logout(token);
+      } else {
+        print('Error getting leagues: $e');
+      }
+    } finally {
+      Loader.hide();
+    }
+    return [];
+  }
+
+  // Future<void> _logoutAndRedirect() async {}
+
+  Future<List<Game>> getGames(String token, String leagueKey) async {
+    try {
+      Loader.show();
+      var response = await Dio().get(
+        'https://my-bet-api.fly.dev/v2/odds/$leagueKey',
+        options: Options(headers: {"Authorization": "Bearer $token"}),
+      );
+      if (response.statusCode == 200) {
+        List<dynamic> gamesJson = response.data;
+        return gamesJson.map((json) => Game.fromJson(json)).toList();
+      } else if(response.statusCode == 401) {
+        await logout(token);
+      }
+    } catch (e) {
+      print('Error getting games: $e');
+    } finally {
+      Loader.hide();
     }
     return [];
   }

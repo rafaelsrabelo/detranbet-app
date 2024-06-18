@@ -17,6 +17,7 @@ dependencies:
   provider: ^6.1.2
   asuka: ^2.2.1
   motion_toast: ^2.10.0
+  intl: ^0.19.0
 
   cupertino_icons: ^1.0.6
 
