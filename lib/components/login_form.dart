@@ -67,7 +67,7 @@ class _LoginFormState extends State<LoginForm> {
                 icon: obscurePass
                     ? const Icon(
                         Icons.visibility_off_outlined,
-                        color: Colors.black38,
+                        color: Config.primaryColor,
                       )
                     : const Icon(
                         Icons.visibility_outlined,
