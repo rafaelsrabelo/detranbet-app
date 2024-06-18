@@ -52,7 +52,7 @@ class _MainLayoutState extends State<MainLayout> {
             label: 'Início',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.history),
+            icon: Icon(Icons.money),
             label: 'Apostas',
           ),
         ],
