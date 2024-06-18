@@ -1,4 +1,5 @@
 import 'package:detranbet/components/app_header.dart';
+import 'package:detranbet/components/card_leagues.dart';
 import 'package:detranbet/providers/dio_provider.dart';
 import 'package:detranbet/utils/config.dart';
 import 'package:flutter/material.dart';
@@ -183,59 +184,14 @@ class _HomePageState extends State<HomePage> {
               const SizedBox(height: 10),
               leagues.isNotEmpty
                   ? Expanded(child: CardLeagues(leagues: leagues))
-                  : Center(
-                      child: Text(
-                        'Carregando Ligas...',
-                        style: GoogleFonts.inter(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w400,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
+                  : const Center(
+                      child: CircularProgressIndicator(
+                      color: Config.primaryColor,
+                    )),
             ],
           ),
         ),
       ),
-    );
-  }
-}
-
-class CardLeagues extends StatelessWidget {
-  final List<League> leagues;
-
-  const CardLeagues({
-    Key? key,
-    required this.leagues,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return ListView.builder(
-      shrinkWrap: true,
-      itemCount: leagues.length,
-      itemBuilder: (context, index) {
-        final league = leagues[index];
-        return Container(
-          margin: const EdgeInsets.symmetric(vertical: 5),
-          width: double.infinity,
-          decoration: BoxDecoration(
-            color: Config.secondaryColor,
-            borderRadius: BorderRadius.circular(10),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-            child: Text(
-              league.title,
-              style: GoogleFonts.inter(
-                fontSize: 16,
-                fontWeight: FontWeight.w400,
-                color: Config.primaryColor,
-              ),
-            ),
-          ),
-        );
-      },
     );
   }
 }
