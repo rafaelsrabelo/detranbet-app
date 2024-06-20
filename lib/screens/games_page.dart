@@ -22,8 +22,8 @@ class _GamePageState extends State<GamePage> {
   @override
   void initState() {
     super.initState();
-    print(widget.leagueKey);
     _fetchGames();
+    final Game game;
   }
 
   Future<void> _fetchGames() async {
@@ -52,7 +52,6 @@ class _GamePageState extends State<GamePage> {
             Navigator.pop(context);
           },
         ),
-        // iconTheme: const IconThemeData(color: Colors.white),
         backgroundColor: Config.backgroundColor,
         title: Text(
           'JOGOS POR LIGA',
@@ -87,13 +86,17 @@ class _GamePageState extends State<GamePage> {
   }
 }
 
-class GameCard extends StatelessWidget {
-  const GameCard({
-    super.key,
-    required this.game,
-  });
-
+class GameCard extends StatefulWidget {
   final Game game;
+
+  const GameCard({Key? key, required this.game}) : super(key: key);
+
+  @override
+  _GameCardState createState() => _GameCardState();
+}
+
+class _GameCardState extends State<GameCard> {
+  String? selectedOdd;
 
   @override
   Widget build(BuildContext context) {
@@ -111,7 +114,7 @@ class GameCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              DateFormat('dd/MM/yyyy HH:mm').format(game.commenceTime),
+              DateFormat('dd/MM/yyyy HH:mm').format(widget.game.commenceTime),
               style: GoogleFonts.inter(
                 fontSize: 12,
                 fontWeight: FontWeight.w400,
@@ -123,7 +126,7 @@ class GameCard extends StatelessWidget {
               children: [
                 Expanded(
                   child: Text(
-                    game.homeTeam,
+                    widget.game.homeTeam,
                     style: GoogleFonts.inter(
                       fontSize: 14,
                       fontWeight: FontWeight.w700,
@@ -135,7 +138,7 @@ class GameCard extends StatelessWidget {
                 const Spacer(),
                 Expanded(
                   child: Text(
-                    game.awayTeam,
+                    widget.game.awayTeam,
                     style: GoogleFonts.inter(
                       fontSize: 14,
                       fontWeight: FontWeight.w700,
@@ -151,11 +154,53 @@ class GameCard extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                _buildPriceContainer("Casa", game.homePrice),
+                _buildPriceContainer(
+                  "Casa",
+                  widget.game.homePrice,
+                  isSelected: selectedOdd == widget.game.homePrice,
+                  onTap: () {
+                    setState(() {
+                      if (selectedOdd == widget.game.homePrice) {
+                        selectedOdd = null; // Desmarca a seleção
+                      } else {
+                        selectedOdd = widget.game.homePrice;
+                      }
+                    });
+                    print(widget.game.homePrice);
+                  },
+                ),
                 const SizedBox(width: 8),
-                _buildPriceContainer("Empate", game.drawPrice),
+                _buildPriceContainer(
+                  "Empate",
+                  widget.game.drawPrice,
+                  isSelected: selectedOdd == widget.game.drawPrice,
+                  onTap: () {
+                    setState(() {
+                      if (selectedOdd == widget.game.drawPrice) {
+                        selectedOdd = null; // Desmarca a seleção
+                      } else {
+                        selectedOdd = widget.game.drawPrice;
+                      }
+                    });
+                    print(widget.game.drawPrice);
+                  },
+                ),
                 const SizedBox(width: 8),
-                _buildPriceContainer("Fora", game.awayPrice),
+                _buildPriceContainer(
+                  "Fora",
+                  widget.game.awayPrice,
+                  isSelected: selectedOdd == widget.game.awayPrice,
+                  onTap: () {
+                    setState(() {
+                      if (selectedOdd == widget.game.awayPrice) {
+                        selectedOdd = null; // Desmarca a seleção
+                      } else {
+                        selectedOdd = widget.game.awayPrice;
+                      }
+                    });
+                    print(widget.game.awayPrice);
+                  },
+                ),
               ],
             ),
           ],
@@ -164,36 +209,40 @@ class GameCard extends StatelessWidget {
     );
   }
 
-  Widget _buildPriceContainer(String title, String price) {
+  Widget _buildPriceContainer(String title, String price,
+      {bool isSelected = false, VoidCallback? onTap}) {
     return Expanded(
-      child: Container(
-        padding: const EdgeInsets.all(12),
-        decoration: BoxDecoration(
-          color: Config.backgroundColor,
-          borderRadius: BorderRadius.circular(10),
-          border: Border.all(color: Config.secondaryColor),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Text(
-              title,
-              style: GoogleFonts.inter(
-                fontSize: 12,
-                fontWeight: FontWeight.w700,
-                color: Colors.white,
+      child: InkWell(
+        onTap: onTap,
+        child: Container(
+          padding: const EdgeInsets.all(12),
+          decoration: BoxDecoration(
+            color: isSelected ? Colors.green : Config.backgroundColor,
+            borderRadius: BorderRadius.circular(10),
+            border: Border.all(color: Config.secondaryColor),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Text(
+                title,
+                style: GoogleFonts.inter(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w700,
+                  color: Colors.white,
+                ),
               ),
-            ),
-            const SizedBox(height: 4),
-            Text(
-              price,
-              style: GoogleFonts.inter(
-                fontSize: 12,
-                fontWeight: FontWeight.w500,
-                color: Colors.white,
+              const SizedBox(height: 4),
+              Text(
+                price,
+                style: GoogleFonts.inter(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w500,
+                  color: Colors.white,
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

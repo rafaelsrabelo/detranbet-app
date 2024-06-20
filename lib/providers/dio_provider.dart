@@ -1,7 +1,9 @@
 import 'package:detranbet/components/loader.dart';
+import 'package:detranbet/main.dart';
 import 'package:detranbet/models/game_model.dart';
 import 'package:detranbet/models/league.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class DioProvider {
@@ -100,6 +102,7 @@ class DioProvider {
           e.response!.statusCode == 401) {
         // Unauthorized: logout and redirect to '/'
         await logout(token);
+        MyApp.navigatorKey.currentState!.pushNamed('auth');
       } else {
         print('Error getting leagues: $e');
       }
@@ -121,8 +124,9 @@ class DioProvider {
       if (response.statusCode == 200) {
         List<dynamic> gamesJson = response.data;
         return gamesJson.map((json) => Game.fromJson(json)).toList();
-      } else if(response.statusCode == 401) {
+      } else if (response.statusCode == 401) {
         await logout(token);
+        MyApp.navigatorKey.currentState!.pushNamed('auth');
       }
     } catch (e) {
       print('Error getting games: $e');
@@ -135,15 +139,9 @@ class DioProvider {
   Future<void> logout(String token) async {
     try {
       Loader.show();
-      var response = await Dio().delete(
-        'https://my-bet-api.fly.dev/logout',
-        options: Options(headers: {"Authorization": "Bearer $token"}),
-      );
-
-      if (response.statusCode == 200) {
-        SharedPreferences prefs = await SharedPreferences.getInstance();
-        await prefs.clear(); // Clear all stored data
-      }
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      await prefs.clear();
+      // }
     } catch (e) {
       print('Error during logout: $e');
     } finally {

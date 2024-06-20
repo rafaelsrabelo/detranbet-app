@@ -9,6 +9,8 @@ class Game {
   final String drawPrice;
   final String sportTitle;
   final String sportKey;
+    int selectedOdd;
+
 
   Game({
     required this.id,
@@ -21,6 +23,7 @@ class Game {
     required this.drawPrice,
     required this.sportTitle,
     required this.sportKey,
+    this.selectedOdd = 0,
   });
 
   factory Game.fromJson(Map<String, dynamic> json) {
